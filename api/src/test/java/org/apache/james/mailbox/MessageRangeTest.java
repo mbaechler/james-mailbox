@@ -18,10 +18,10 @@
  ****************************************************************/
 package org.apache.james.mailbox;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 import org.apache.james.mailbox.model.MessageRange;
 import org.junit.Test;
@@ -29,67 +29,50 @@ import org.junit.Test;
 public class MessageRangeTest {
 
     @Test
-    public void testToRanges() {
+    public void givenSomeNumbersToRangeShouldReturnThreeRanges() {
         List<MessageRange> ranges = MessageRange.toRanges(Arrays.asList(1L,2L,3L,5L,6L,9L));
-        assertEquals(3, ranges.size());
-        checkRange(1, 3, ranges.get(0));
-        checkRange(5, 6, ranges.get(1));
-        checkRange(9, 9, ranges.get(2));
-
+        assertThat(ranges).containsExactly(
+                MessageRange.range(1, 3), 
+                MessageRange.range(5, 6), 
+                MessageRange.one(9));
     }
     
     @Test
-    public void testOneUidToRange() {
+    public void givenASingleNumberToRangeShouldReturnOneRange() {
         List<MessageRange> ranges = MessageRange.toRanges(Arrays.asList(1L));
-        assertEquals(1, ranges.size());
-        checkRange(1, 1, ranges.get(0));
+        assertThat(ranges).containsExactly(MessageRange.one(1));
     }
     
     // Test for MAILBOX-56
     @Test
     public void testTwoSeqUidToRange() {
         List<MessageRange> ranges = MessageRange.toRanges(Arrays.asList(1L,2L));
-        assertEquals(1, ranges.size());
-        checkRange(1, 2, ranges.get(0));
-
+        assertThat(ranges).containsExactly(MessageRange.range(1, 2));
     }
     
-    
-    private void checkRange(long from, long to, MessageRange range) {
-        assertEquals(from, range.getUidFrom());
-        assertEquals(to, range.getUidTo());
-    }
     
     @Test
-    public void testSplitOne() {
+    public void splitASingletonRangeShouldReturnASingleRange() {
         MessageRange one = MessageRange.one(1);
         List<MessageRange> ranges = one.split(2);
-        assertEquals(1, ranges.size());
-        checkRange(1, 1, ranges.get(0));
-        assertEquals(MessageRange.Type.ONE, ranges.get(0).getType());
+        assertThat(ranges).containsExactly(MessageRange.one(1));
     }
     
     @Test
-    public void testSplitFrom() {
+    public void splitUnboundedRangeShouldReturnTheSameRange() {
         MessageRange from = MessageRange.from(1);
         List<MessageRange> ranges = from.split(2);
-        assertEquals(1, ranges.size());
-        checkRange(1, MessageRange.NOT_A_UID, ranges.get(0));
-        assertEquals(MessageRange.Type.FROM, ranges.get(0).getType());
+        assertThat(ranges).containsExactly(MessageRange.from(1));
     }
     
     @Test
-    public void testSplitRange() {
+    public void splitTenElementsRangeShouldReturn4Ranges() {
         MessageRange range = MessageRange.range(1,10);
         List<MessageRange> ranges = range.split(3);
-        assertEquals(4, ranges.size());
-        checkRange(1, 3, ranges.get(0));
-        assertEquals(MessageRange.Type.RANGE, ranges.get(0).getType());
-        checkRange(4, 6, ranges.get(1));
-        assertEquals(MessageRange.Type.RANGE, ranges.get(1).getType());
-        checkRange(7, 9, ranges.get(2));
-        assertEquals(MessageRange.Type.RANGE, ranges.get(2).getType());
-        checkRange(10, 10, ranges.get(3));
-        assertEquals(MessageRange.Type.ONE, ranges.get(3).getType());
+        assertThat(ranges).containsExactly(
+                MessageRange.range(1, 3), 
+                MessageRange.range(4, 6), 
+                MessageRange.range(7, 9), 
+                MessageRange.one(10));
     }
 }

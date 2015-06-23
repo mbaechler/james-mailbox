@@ -18,11 +18,10 @@
  ****************************************************************/
 package org.apache.james.mailbox;
 
-import junit.framework.Assert;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.james.mailbox.exception.MailboxException;
 import org.junit.Test;
-
 /**
  * Ensure that {@link MailboxException} construction is correct.
  */
@@ -35,13 +34,13 @@ public class MailboxExceptionTest {
     @Test
     public void testMailboxExceptionMessage() {
         MailboxException mbe = new MailboxException(EXCEPTION_MESSAGE);
-        Assert.assertEquals(EXCEPTION_MESSAGE, mbe.getMessage());
+        assertThat(mbe).hasMessage(EXCEPTION_MESSAGE);
     }
 
     @Test
     public void testMailboxExceptionCause() {
         MailboxException mbe = new MailboxException(EXCEPTION_MESSAGE, EXCEPTION_CAUSE);
-        Assert.assertEquals(EXCEPTION_MESSAGE, mbe.getMessage());
+        assertThat(mbe).hasMessage(EXCEPTION_MESSAGE).hasCause(EXCEPTION_CAUSE);
     }
 
 }

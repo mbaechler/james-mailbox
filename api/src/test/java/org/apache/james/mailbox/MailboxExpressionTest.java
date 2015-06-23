@@ -19,7 +19,9 @@
 
 package org.apache.james.mailbox;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.james.mailbox.model.MailboxPath;
 import org.apache.james.mailbox.model.MailboxQuery;
@@ -55,40 +57,40 @@ public class MailboxExpressionTest {
     }
 
     @Test
-    public void testCombinedNameEmptyPart() throws Exception {
+    public void combinedNameWithNoExpressionShouldReturnBase() throws Exception {
         MailboxQuery expression = new MailboxQuery(BASE_PATH, "", '.');
-        assertEquals(BASE, expression.getCombinedName());
+        assertThat(expression.getCombinedName()).isEqualTo(BASE);
     }
 
     @Test
-    public void testNullCombinedName() throws Exception {
+    public void combinedNameOnNullShouldBeEmpty() throws Exception {
         MailboxQuery expression = new MailboxQuery(new MailboxPath(null, null, null), null, '.');
-        assertNotNull(expression.getCombinedName());
+        assertThat(expression.getCombinedName()).isEmpty();
     }
 
     @Test
-    public void testSimpleCombinedName() throws Exception {
-        MailboxQuery expression = create(PART);
-        assertEquals(BASE + "." + PART, expression.getCombinedName());
+    public void combinedNameShouldContainBaseAndPart() throws Exception {
+        MailboxQuery expression = new MailboxQuery(BASE_PATH, PART, '.');
+        assertThat(expression.getCombinedName()).isEqualTo(BASE + "." + PART);
     }
 
     @Test
-    public void testCombinedNamePartStartsWithDelimiter() throws Exception {
-        MailboxQuery expression = create("." + PART);
-        assertEquals(BASE + "." + PART, expression.getCombinedName());
+    public void combinedNameOnPartStartingWithDelimiterShouldIgnoreDelimiter() throws Exception {
+        MailboxQuery expression = new MailboxQuery(BASE_PATH, "." + PART, '.');
+        assertThat(expression.getCombinedName()).isEqualTo(BASE + "." + PART);
     }
 
     @Test
-    public void testCombinedNameBaseEndsWithDelimiter() throws Exception {
+    public void combinedNameOnBaseEndingWithDelimiterShouldIgnoreDelimiter() throws Exception {
         MailboxQuery expression = new MailboxQuery(new MailboxPath(null, null, BASE + '.'), PART, '.');
-        assertEquals(BASE + "." + PART, expression.getCombinedName());
+        assertThat(expression.getCombinedName()).isEqualTo(BASE + "." + PART);
     }
 
     @Test
-    public void testCombinedNameBaseEndsWithDelimiterPartStarts()
+    public void combinedNameShouldIgnoreAllDelimiters()
             throws Exception {
         MailboxQuery expression = new MailboxQuery(new MailboxPath(null, null, BASE + '.'), '.' + PART, '.');
-        assertEquals(BASE + "." + PART, expression.getCombinedName());
+        assertThat(expression.getCombinedName()).isEqualTo(BASE + "." + PART);
     }
 
     @Test
