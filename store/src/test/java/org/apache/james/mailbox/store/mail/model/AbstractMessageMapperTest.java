@@ -149,6 +149,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         assertThat(messageMapper.findInMailbox(benwaInboxMailbox, MessageRange.one(message1.getUid()), MessageMapper.FetchType.Metadata, LIMIT)).isEmpty();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void deletingUnExistingMessageShouldHaveNoSideEffect() throws MailboxException, IOException {
         saveMessages();
@@ -172,6 +173,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
             .isEqualTo(message1, fetchType);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void messagesCanBeRetrievedInMailboxWithRangeTypeRange() throws MailboxException, IOException{
         saveMessages();
@@ -180,6 +182,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         assertThat(retrievedMessageIterator).containsOnly(message1, message2, message3, message4);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void messagesCanBeRetrievedInMailboxWithRangeTypeRangeContainingAHole() throws MailboxException, IOException {
         saveMessages();
@@ -189,6 +192,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         assertThat(retrievedMessageIterator).containsOnly(message1, message2, message4);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void messagesCanBeRetrievedInMailboxWithRangeTypeFrom() throws MailboxException, IOException {
         saveMessages();
@@ -197,6 +201,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         assertThat(retrievedMessageIterator).containsOnly(message3, message4, message5);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void messagesCanBeRetrievedInMailboxWithRangeTypeFromContainingAHole() throws MailboxException, IOException {
         saveMessages();
@@ -206,6 +211,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         assertThat(retrievedMessageIterator).containsOnly(message3, message5);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void messagesCanBeRetrievedInMailboxWithRangeTypeAll() throws MailboxException, IOException {
         saveMessages();
@@ -213,6 +219,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
             .containsOnly(message1, message2, message3, message4, message5);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void messagesCanBeRetrievedInMailboxWithRangeTypeAllContainingHole() throws MailboxException, IOException {
         saveMessages();
@@ -297,6 +304,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         assertThat(messageMapper.expungeMarkedForDeletionInMailbox(benwaInboxMailbox, MessageRange.all())).isEmpty();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void expungeMarkedForDeletionInMailboxShouldReturnEmptyResultWhenNoMessageInMailboxIsDeleted() throws MailboxException, IOException {
         saveMessages();
@@ -313,6 +321,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
             .containsMetadataForMessages(message1, message4);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void expungeShouldModifyUnderlyingStorageWithRangeAll() throws MailboxException, IOException {
         saveMessages();
@@ -329,6 +338,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
             .containsMetadataForMessages(message1);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void expungeShouldModifyUnderlyingStorageWithRangeOne() throws MailboxException, IOException {
         saveMessages();
@@ -345,6 +355,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
             .containsMetadataForMessages(message4);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void expungeShouldModifyUnderlyingStorageWithRangeFrom() throws MailboxException, IOException {
         saveMessages();
@@ -361,6 +372,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
             .containsMetadataForMessages(message4);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void expungeShouldModifyUnderlyingStorageWithRange() throws MailboxException, IOException {
         saveMessages();
@@ -660,7 +672,7 @@ public abstract class AbstractMessageMapperTest<Id extends MailboxId> {
         message6.setModSeq(messageMapper.getHighestModSeq(benwaWorkMailbox));
     }
 
-    private Message<Id> retrieveMessageFromStorage(Message message) throws MailboxException {
+    private Message<Id> retrieveMessageFromStorage(Message<Id> message) throws MailboxException {
         return messageMapper.findInMailbox(benwaInboxMailbox, MessageRange.one(message.getUid()), MessageMapper.FetchType.Metadata, LIMIT).next();
     }
     

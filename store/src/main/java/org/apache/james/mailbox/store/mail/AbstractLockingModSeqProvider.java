@@ -48,7 +48,7 @@ public abstract class AbstractLockingModSeqProvider<Id extends MailboxId> implem
             public Long execute() throws MailboxException {
                 return lockedNextModSeq(session, mailbox);
             }
-        });
+        }, true);
     }
     
     /**

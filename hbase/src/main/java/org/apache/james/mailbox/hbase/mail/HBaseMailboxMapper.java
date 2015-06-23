@@ -347,6 +347,7 @@ public class HBaseMailboxMapper extends HBaseNonTransactionalMapper implements M
             scan = new Scan();
             scan.setMaxVersions(1);
             scan.addColumn(MAILBOX_CF, MAILBOX_MESSAGE_COUNT);
+            IOUtils.cleanup(null, scanner);
             scanner = mailboxes.getScanner(scan);
             Put put = null;
             while ((result = scanner.next()) != null) {
@@ -357,14 +358,7 @@ public class HBaseMailboxMapper extends HBaseNonTransactionalMapper implements M
         } catch (IOException e) {
             throw new RuntimeException("Error deleting MESSAGES table ", e);
         } finally {
-            IOUtils.closeStream(scanner);
-            if (messages != null) {
-                try {
-                    messages.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException("Error closing table " + messages, ex);
-                }
-            }
+            IOUtils.cleanup(null, scanner, messages, mailboxes);
         }
     }
     
@@ -382,14 +376,11 @@ public class HBaseMailboxMapper extends HBaseNonTransactionalMapper implements M
             while ((result = scanner.next()) != null) {
                 deletes.add(new Delete(result.getRow()));
             }
-            long totalDeletes = deletes.size();
             mailboxes.delete(deletes);
         } catch (IOException ex) {
             throw new RuntimeException("IOException deleting mailboxes", ex);
         } finally {
-            IOUtils.closeStream(scanner);
-            // TODO Temporary commented, was not compiling.
-//            IOUtils.closeStream(mailboxes);
+            IOUtils.cleanup(null, scanner, mailboxes);
         }
     }
 

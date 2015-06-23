@@ -57,9 +57,8 @@ public class SimpleMessageTest {
     @Test
     public void testInputStreamSize() throws IOException {
         InputStream is = MESSAGE.getFullContent();
-        int b = 0;
         int byteCount = 0;
-        while ((b = is.read()) != -1) {
+        while (is.read() != -1) {
             byteCount++;
         }
         assertEquals(MESSAGE_CONTENT.length(), byteCount);
@@ -68,9 +67,8 @@ public class SimpleMessageTest {
     @Test
     public void testInputStreamSizeSpecialCharacters() throws IOException {
         InputStream is = MESSAGE_SPECIAL_CHAR.getFullContent();
-        int b = 0;
         int byteCount = 0;
-        while ((b = is.read()) != -1) {
+        while (is.read() != -1) {
             byteCount++;
         }
         assertFalse(MESSAGE_CONTENT_SPECIAL_CHAR.length() == byteCount);

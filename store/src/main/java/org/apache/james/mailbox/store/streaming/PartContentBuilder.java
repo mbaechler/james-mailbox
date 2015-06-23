@@ -106,6 +106,17 @@ public class PartContentBuilder {
                         break;
                     case T_END_OF_STREAM:
                         throw new PartNotFoundException(position);
+                case T_END_BODYPART:
+                case T_END_HEADER:
+                case T_END_MESSAGE:
+                case T_END_MULTIPART:
+                case T_EPILOGUE:
+                case T_FIELD:
+                case T_PREAMBLE:
+                case T_RAW_ENTITY:
+                case T_START_HEADER:
+                case T_START_MESSAGE:
+                    break;
                 }
             }
         } catch (IllegalStateException e) {
@@ -123,6 +134,19 @@ public class PartContentBuilder {
                 case T_START_MULTIPART:
                     ignoreInnerMessage();
                     break;
+            case T_BODY:
+            case T_END_BODYPART:
+            case T_END_HEADER:
+            case T_END_MESSAGE:
+            case T_END_MULTIPART:
+            case T_EPILOGUE:
+            case T_FIELD:
+            case T_PREAMBLE:
+            case T_RAW_ENTITY:
+            case T_START_BODYPART:
+            case T_START_HEADER:
+            case T_START_MESSAGE:
+                break;
             }
         }
     }
@@ -221,6 +245,19 @@ public class PartContentBuilder {
                         ResultHeader header = new ResultHeader(fieldName, fieldValue);
                         results.add(header);
                         break;
+                case T_BODY:
+                case T_END_BODYPART:
+                case T_END_HEADER:
+                case T_END_MESSAGE:
+                case T_END_MULTIPART:
+                case T_EPILOGUE:
+                case T_PREAMBLE:
+                case T_RAW_ENTITY:
+                case T_START_BODYPART:
+                case T_START_HEADER:
+                case T_START_MESSAGE:
+                case T_START_MULTIPART:
+                    break;
                 }
             }
         }
@@ -249,6 +286,19 @@ public class PartContentBuilder {
                             ResultHeader header = new ResultHeader(fieldName, fieldValue);
                             results.add(header);
                             break;
+                    case T_BODY:
+                    case T_END_BODYPART:
+                    case T_END_HEADER:
+                    case T_END_MESSAGE:
+                    case T_END_MULTIPART:
+                    case T_EPILOGUE:
+                    case T_PREAMBLE:
+                    case T_START_HEADER:
+                    case T_START_MESSAGE:
+                    case T_START_MULTIPART:
+                    case T_RAW_ENTITY:
+                    case T_START_BODYPART:
+                        break;
                     }
                 }
             } catch (UnexpectedEOFException e) {

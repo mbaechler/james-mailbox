@@ -56,6 +56,8 @@ public class IMAP168JpaMigrateCommand implements JpaMigrateCommand {
         JpaMigrateQuery.executeUpdate(em, "ALTER TABLE MAILBOX ADD COLUMN USER0 VARCHAR(255)");
 
         Query query = em.createNativeQuery("SELECT NAME FROM MAILBOX");
+        
+        @SuppressWarnings("unchecked")
         List<String> nameList = query.getResultList();
         System.out.println("getResultList returned a result=" + nameList.size());
         for (String name: nameList) {

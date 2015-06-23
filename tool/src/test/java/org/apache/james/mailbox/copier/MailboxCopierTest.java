@@ -18,14 +18,15 @@
  ****************************************************************/
 package org.apache.james.mailbox.copier;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.IOException;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import org.apache.james.mailbox.MailboxManager;
 import org.apache.james.mailbox.MailboxSession;
 import org.apache.james.mailbox.MessageManager;
+import org.apache.james.mailbox.MessageManager.MetaData.FetchGroup;
 import org.apache.james.mailbox.acl.GroupMembershipResolver;
 import org.apache.james.mailbox.acl.MailboxACLResolver;
 import org.apache.james.mailbox.acl.SimpleGroupMembershipResolver;
@@ -133,11 +134,11 @@ public class MailboxCopierTest {
 
         List<MailboxPath> mailboxPathList = mailboxManager.list(mailboxSession);
         
-        Assert.assertEquals(MockMailboxManager.EXPECTED_MAILBOXES_COUNT, mailboxPathList.size());
+        assertThat(mailboxPathList).hasSize(MockMailboxManager.EXPECTED_MAILBOXES_COUNT);
         
         for (MailboxPath mailboxPath: mailboxPathList) {
             MessageManager messageManager = mailboxManager.getMailbox(mailboxPath, mailboxSession);
-            Assert.assertEquals(MockMailboxManager.MESSAGE_PER_MAILBOX_COUNT * multiplicationFactor, messageManager.getMessageCount(mailboxSession));
+            assertThat(messageManager.getMetaData(false, mailboxSession, FetchGroup.NO_UNSEEN).getMessageCount()).isEqualTo(MockMailboxManager.MESSAGE_PER_MAILBOX_COUNT * multiplicationFactor);
         }
         
         mailboxManager.endProcessingRequest(mailboxSession);

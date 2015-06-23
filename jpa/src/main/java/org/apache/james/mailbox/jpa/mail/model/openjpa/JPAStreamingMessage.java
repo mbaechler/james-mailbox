@@ -51,12 +51,10 @@ import org.apache.openjpa.persistence.Persistent;
 @Table(name="JAMES_MAIL")
 public class JPAStreamingMessage extends AbstractJPAMessage {
 
-    @SuppressWarnings("unused")
     @Persistent(optional = false, fetch = FetchType.LAZY)
     @Column(name = "MAIL_BYTES", length = 1048576000, nullable = false)
     private InputStream body;
 
-    @SuppressWarnings("unused")
     @Persistent(optional = false, fetch = FetchType.LAZY)
     @Column(name = "HEADER_BYTES", length = 10485760, nullable = false)
     private InputStream header;

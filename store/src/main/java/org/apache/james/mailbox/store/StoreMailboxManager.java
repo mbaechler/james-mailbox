@@ -373,7 +373,7 @@ public class StoreMailboxManager<Id extends MailboxId> implements MailboxManager
                         return null;
 
                     }
-                });
+                }, true);
 
         }
     }
@@ -449,7 +449,7 @@ public class StoreMailboxManager<Id extends MailboxId> implements MailboxManager
                         return null;
 
                     }
-                });
+                }, true);
             }
         });
     }

@@ -18,10 +18,12 @@
  ****************************************************************/
 package org.apache.james.mailbox;
 
-import java.util.Collection;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import org.apache.james.mailbox.exception.SubscriptionException;
 import org.apache.james.mailbox.mock.MockMailboxSession;
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -34,43 +36,70 @@ public abstract class AbstractSubscriptionManagerTest {
     private final static String USER1 = "test";
     private final static String MAILBOX1 = "test1";
     private final static String MAILBOX2 = "test2";
+    private SubscriptionManager manager;
+    private MailboxSession session;
 
     public abstract SubscriptionManager createSubscriptionManager();
-    
-    @Test
-    public void testSubscriptionManager() throws Exception {
-        SubscriptionManager manager = createSubscriptionManager();
-        MailboxSession session = new MockMailboxSession(USER1);
+
+    @Before
+    public void setup() {
+        manager = createSubscriptionManager();
+        session = new MockMailboxSession(USER1);
         manager.startProcessingRequest(session);
-        
-        Assert.assertTrue(manager.subscriptions(session).isEmpty());
-        
-        manager.subscribe(session, MAILBOX1);
-        Assert.assertEquals(MAILBOX1, manager.subscriptions(session).iterator().next());
-        Assert.assertEquals(1, manager.subscriptions(session).size());
-        
-        
-        manager.subscribe(session, MAILBOX1);
-        Assert.assertEquals(MAILBOX1, manager.subscriptions(session).iterator().next());
-        Assert.assertEquals(1, manager.subscriptions(session).size());
-        
-        manager.subscribe(session, MAILBOX2);
-        Collection<String> col = manager.subscriptions(session);
-      
-        Assert.assertTrue(col.contains(MAILBOX2));
-        Assert.assertTrue(col.contains(MAILBOX1));
-        Assert.assertEquals(2, col.size());
-        
-        
-        manager.unsubscribe(session, MAILBOX1);
-        Assert.assertEquals(MAILBOX2, manager.subscriptions(session).iterator().next());
-        Assert.assertEquals(1, manager.subscriptions(session).size());
-        
-        manager.unsubscribe(session, MAILBOX1);
-        Assert.assertEquals(MAILBOX2, manager.subscriptions(session).iterator().next());
-        Assert.assertEquals(1, manager.subscriptions(session).size());
-        
-        
+    }
+    
+    @After
+    public void teardown() {
         manager.endProcessingRequest(session);
     }
+    
+    @Test
+    public void user1ShouldNotHaveAnySubscriptionByDefault() throws SubscriptionException {
+        assertThat(manager.subscriptions(session)).isEmpty();
+    }
+    
+    
+    @Test
+    public void user1ShouldBeAbleToSubscribeOneMailbox() throws SubscriptionException {
+        manager.subscribe(session, MAILBOX1);
+
+        assertThat(manager.subscriptions(session)).containsExactly(MAILBOX1);
+    }
+
+    @Test
+    public void subscribeShouldBeIdempotent() throws SubscriptionException {
+        manager.subscribe(session, MAILBOX1);
+        manager.subscribe(session, MAILBOX1);
+        
+        assertThat(manager.subscriptions(session)).containsExactly(MAILBOX1);
+    }
+    
+    @Test
+    public void user1ShouldBeAbleToSubscribeTwoMailbox() throws SubscriptionException {
+        manager.subscribe(session, MAILBOX1);
+        manager.subscribe(session, MAILBOX2);
+        
+        assertThat(manager.subscriptions(session)).containsExactly(MAILBOX1, MAILBOX2);
+    }
+    
+    @Test
+    public void user1ShouldBeAbleToUnsubscribeOneMailbox() throws SubscriptionException {
+        manager.subscribe(session, MAILBOX1);
+        manager.subscribe(session, MAILBOX2);
+
+        manager.unsubscribe(session, MAILBOX1);
+        
+        assertThat(manager.subscriptions(session)).containsExactly(MAILBOX2);
+    }
+    
+    @Test
+    public void unsubscribeShouldBeIdempotent() throws SubscriptionException {
+        manager.subscribe(session, MAILBOX1);
+        manager.subscribe(session, MAILBOX2);
+        manager.unsubscribe(session, MAILBOX1);
+        manager.unsubscribe(session, MAILBOX1);
+        
+        assertThat(manager.subscriptions(session)).containsExactly(MAILBOX2);
+    }
+    
 }

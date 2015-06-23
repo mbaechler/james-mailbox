@@ -106,6 +106,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.Version;
 
 /**
@@ -1203,8 +1204,9 @@ public class LuceneMessageSearchIndex<Id extends MailboxId> extends ListeningMes
      * @see org.apache.james.mailbox.store.search.ListeningMessageSearchIndex#update(org.apache.james.mailbox.MailboxSession, org.apache.james.mailbox.store.mail.model.Mailbox, org.apache.james.mailbox.model.MessageRange, javax.mail.Flags)
      */
     public void update(MailboxSession session, Mailbox<Id> mailbox, MessageRange range, Flags f, long modSeq) throws MailboxException {
+        IndexSearcher searcher = null;
         try {
-            IndexSearcher searcher = new IndexSearcher(IndexReader.open(writer, true));
+            searcher = new IndexSearcher(IndexReader.open(writer, true));
             BooleanQuery query = new BooleanQuery();
             query.add(new TermQuery(new Term(MAILBOX_ID_FIELD, mailbox.getMailboxId().serialize())), BooleanClause.Occur.MUST);
             query.add(createQuery(range), BooleanClause.Occur.MUST);
@@ -1215,7 +1217,7 @@ public class LuceneMessageSearchIndex<Id extends MailboxId> extends ListeningMes
             for (int i = 0; i < sDocs.length; i++) {
                 Document doc = searcher.doc(sDocs[i].doc);
                 
-                if (doc.getField(FLAGS_FIELD) == null) {
+                if (doc.getFieldable(FLAGS_FIELD) == null) {
                     doc.removeFields(FLAGS_FIELD);
                     indexFlags(doc, f);
 
@@ -1226,6 +1228,12 @@ public class LuceneMessageSearchIndex<Id extends MailboxId> extends ListeningMes
         } catch (IOException e) {
             throw new MailboxException("Unable to add messages in index", e);
 
+        } finally {
+            try {
+                IOUtils.closeWhileHandlingException(searcher);
+            } catch (IOException e) {
+                //can't happen anyway
+            }
         }
         
     }

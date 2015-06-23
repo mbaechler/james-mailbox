@@ -50,7 +50,7 @@ public abstract class AbstractLockingUidProvider<Id extends MailboxId> implement
             public Long execute() throws MailboxException {
                 return lockedNextUid(session, mailbox);
             }
-        });
+        }, true);
     }
     
     /**

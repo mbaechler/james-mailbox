@@ -64,6 +64,7 @@ public class IMAP180JpaMigrateCommand implements JpaMigrateCommand {
     /**
      * Migrate the headers.
      */
+    @SuppressWarnings("rawtypes")
     private static void migrateHeaders(EntityManager em) {
         
         em.getTransaction().begin();
@@ -111,6 +112,7 @@ public class IMAP180JpaMigrateCommand implements JpaMigrateCommand {
     /**
      * Migrate the properties.
      */
+    @SuppressWarnings("rawtypes")
     private static void migrateProperties(EntityManager em) {
         
         em.getTransaction().begin();

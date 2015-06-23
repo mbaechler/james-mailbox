@@ -139,6 +139,7 @@ public abstract class AbstractMailboxMapperTest<Id extends MailboxId> {
         MailboxAssert.assertThat(mailboxMapper.findMailboxByPath(esnDevGroupInboxPath)).isEqualTo(esnDevGroupInboxMailbox);
     }
     
+    @SuppressWarnings("unchecked")
     @Test
     public void listShouldRetrieveAllMailbox() throws MailboxException {
         saveAll();
@@ -177,6 +178,7 @@ public abstract class AbstractMailboxMapperTest<Id extends MailboxId> {
         assertThat(mailboxMapper.hasChildren(bobInboxMailbox, '.')).isFalse();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPathLikeShouldBeLimitedToUserAndNamespace() throws MailboxException {
         saveAll();
@@ -206,6 +208,7 @@ public abstract class AbstractMailboxMapperTest<Id extends MailboxId> {
         mailboxMapper.findMailboxByPath(esnDevGroupJamesPath);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPathLikeWithChildRegexShouldRetrieveChildren() throws MailboxException {
         saveAll();
@@ -213,6 +216,7 @@ public abstract class AbstractMailboxMapperTest<Id extends MailboxId> {
         assertThat(mailboxMapper.findMailboxWithPathLike(regexPath)).containsOnly(benwaWorkMailbox, benwaWorkTodoMailbox, benwaWorkDoneMailbox);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPathLikeWithNullUserWithChildRegexShouldRetrieveChildren() throws MailboxException {
         saveAll();
@@ -220,6 +224,7 @@ public abstract class AbstractMailboxMapperTest<Id extends MailboxId> {
         assertThat(mailboxMapper.findMailboxWithPathLike(regexPath)).contains(obmTeamGroupInboxMailbox, obmTeamGroupOPushMailbox, obmTeamGroupRoundCubeMailbox);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPathLikeWithRegexShouldRetrieveCorrespondingMailbox() throws MailboxException {
         saveAll();
@@ -227,6 +232,7 @@ public abstract class AbstractMailboxMapperTest<Id extends MailboxId> {
         assertThat(mailboxMapper.findMailboxWithPathLike(regexPath)).containsOnly(benwaInboxMailbox);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPathLikeWithNullUserWithRegexShouldRetrieveCorrespondingMailbox() throws MailboxException {
         saveAll();

@@ -40,11 +40,7 @@ import org.apache.james.mailbox.store.user.model.impl.SimpleSubscription;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 
 public class CassandraSubscriptionMapper extends NonTransactionalMapper implements SubscriptionMapper {
     private Session session;

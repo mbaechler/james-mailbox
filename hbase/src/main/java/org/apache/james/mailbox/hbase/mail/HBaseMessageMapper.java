@@ -337,8 +337,7 @@ public class HBaseMessageMapper extends NonTransactionalMapper implements Messag
             scan.setMaxVersions(1);
             scanner = messages.getScanner(scan);
             long count = 0;
-            Result result;
-            while ((result = scanner.next()) != null) {
+            while (scanner.next() != null) {
                 count++;
             }
             return count;

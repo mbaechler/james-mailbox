@@ -31,7 +31,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -176,24 +175,28 @@ public class HBaseMailboxMapperTest {
     private void testSave() throws Exception {
         LOG.info("save and mailboxFromResult");
         final HTable mailboxes = new HTable(conf, MAILBOXES_TABLE);
-
-        final HBaseMailbox mlbx = mailboxList.get(mailboxList.size() / 2);
-
-        final Get get = new Get(mlbx.getMailboxId().toBytes());
-        // get all columns for the DATA column family
-        get.addFamily(MAILBOX_CF);
-
-        final Result result = mailboxes.get(get);
-        final HBaseMailbox newValue = (HBaseMailbox) mailboxFromResult(result);
-        assertEquals(mlbx, newValue);
-        assertEquals(mlbx.getUser(), newValue.getUser());
-        assertEquals(mlbx.getName(), newValue.getName());
-        assertEquals(mlbx.getNamespace(), newValue.getNamespace());
-        assertEquals(mlbx.getMailboxId(), newValue.getMailboxId());
-        assertEquals(mlbx.getLastUid(), newValue.getLastUid());
-        assertEquals(mlbx.getUidValidity(), newValue.getUidValidity());
-        assertEquals(mlbx.getHighestModSeq(), newValue.getHighestModSeq());
-        assertArrayEquals(mlbx.getMailboxId().toBytes(), newValue.getMailboxId().toBytes());
+        try {
+            
+            final HBaseMailbox mlbx = mailboxList.get(mailboxList.size() / 2);
+        
+            final Get get = new Get(mlbx.getMailboxId().toBytes());
+            // get all columns for the DATA column family
+            get.addFamily(MAILBOX_CF);
+        
+            final Result result = mailboxes.get(get);
+            final HBaseMailbox newValue = (HBaseMailbox) mailboxFromResult(result);
+            assertEquals(mlbx, newValue);
+            assertEquals(mlbx.getUser(), newValue.getUser());
+            assertEquals(mlbx.getName(), newValue.getName());
+            assertEquals(mlbx.getNamespace(), newValue.getNamespace());
+            assertEquals(mlbx.getMailboxId(), newValue.getMailboxId());
+            assertEquals(mlbx.getLastUid(), newValue.getLastUid());
+            assertEquals(mlbx.getUidValidity(), newValue.getUidValidity());
+            assertEquals(mlbx.getHighestModSeq(), newValue.getHighestModSeq());
+            assertArrayEquals(mlbx.getMailboxId().toBytes(), newValue.getMailboxId().toBytes());
+        } finally {
+            mailboxes.close();
+        }
     }
 
     /**
@@ -249,14 +252,6 @@ public class HBaseMailboxMapperTest {
     }
 
     /**
-     * Test of deleteAllMemberships method, of class HBaseMailboxMapper.
-     */
-    private void testDeleteAllMemberships() {
-        LOG.info("deleteAllMemberships");
-        fail("Not yet implemented");
-    }
-
-    /**
      * Test of deleteAllMailboxes method, of class HBaseMailboxMapper.
      */
     private void testDeleteAllMailboxes() throws MailboxException {
@@ -284,19 +279,24 @@ public class HBaseMailboxMapperTest {
                 MESSAGES_TABLE, MESSAGE_DATA_BODY_CF, Bytes.toBytes("10"), 10);
         ChunkInputStream in = new ChunkInputStream(conf,
                 MESSAGES_TABLE, MESSAGE_DATA_BODY_CF, Bytes.toBytes("10"));
-        //create the stream
-        ByteArrayInputStream bin = new ByteArrayInputStream(data);
-        ByteArrayOutputStream bout = new ByteArrayOutputStream(data.length);
-        int b;
-        while ((b = bin.read()) != -1) {
-            out.write(b);
+        try {
+            //create the stream
+            ByteArrayInputStream bin = new ByteArrayInputStream(data);
+            ByteArrayOutputStream bout = new ByteArrayOutputStream(data.length);
+            int b;
+            while ((b = bin.read()) != -1) {
+                out.write(b);
+            }
+            out.close();
+            while ((b = in.read()) != -1) {
+                bout.write(b);
+            }
+            String s = bout.toString();
+            assertTrue(original.equals(s));
+        } finally {
+            in.close();
+            out.close();
         }
-        out.close();
-        while ((b = in.read()) != -1) {
-            bout.write(b);
-        }
-        String s = bout.toString();
-        assertTrue(original.equals(s));
     }
 
     private static void fillMailboxList() {

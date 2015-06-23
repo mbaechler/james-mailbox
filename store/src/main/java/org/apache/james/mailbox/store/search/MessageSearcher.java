@@ -173,6 +173,17 @@ public class MessageSearcher {
                                     result, parser);
                         }
                         break;
+                case T_END_BODYPART:
+                case T_END_HEADER:
+                case T_END_MESSAGE:
+                case T_END_MULTIPART:
+                case T_END_OF_STREAM:
+                case T_RAW_ENTITY:
+                case T_START_BODYPART:
+                case T_START_HEADER:
+                case T_START_MESSAGE:
+                case T_START_MULTIPART:
+                    break;
                 }
             }
             return result;

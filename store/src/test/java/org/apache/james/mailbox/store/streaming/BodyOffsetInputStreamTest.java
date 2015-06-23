@@ -29,18 +29,17 @@ public class BodyOffsetInputStreamTest {
     private String mail = "Subject: test\r\n\r\nbody";
     private long expectedOffset = 17;
     private long bytes = mail.length();
+    
     @Test
     public void testRead() throws IOException {
         BodyOffsetInputStream in = new BodyOffsetInputStream(new ByteArrayInputStream(mail.getBytes()));
         
-        @SuppressWarnings("unused")
-        int i = -1;
-        while ((i = in.read())!= -1) {
+        while (in.read() != -1) {
             // consume stream
         }
         assertEquals(expectedOffset, in.getBodyStartOffset());
         assertEquals(bytes, in.getReadBytes());
-
+        in.close();
     }
     
     
@@ -48,14 +47,13 @@ public class BodyOffsetInputStreamTest {
     public void testReadWithArray() throws IOException {
         BodyOffsetInputStream in = new BodyOffsetInputStream(new ByteArrayInputStream(mail.getBytes()));
         
-        @SuppressWarnings("unused")
-        int i = -1;
         byte[] b = new byte[8];
-        while ((i = in.read(b))!= -1) {
+        while (in.read(b) != -1) {
             // consume stream
         }
         assertEquals(expectedOffset, in.getBodyStartOffset());
         assertEquals(bytes, in.getReadBytes());
+        in.close();
     }
     
     
@@ -63,13 +61,12 @@ public class BodyOffsetInputStreamTest {
     public void testReadWithArrayBiggerThenStream() throws IOException {
         BodyOffsetInputStream in = new BodyOffsetInputStream(new ByteArrayInputStream(mail.getBytes()));
         
-        @SuppressWarnings("unused")
-        int i = -1;
         byte[] b = new byte[4096];
-        while ((i = in.read(b))!= -1) {
+        while (in.read(b) != -1) {
             // consume stream
         }
         assertEquals(expectedOffset, in.getBodyStartOffset());
         assertEquals(bytes, in.getReadBytes());
+        in.close();
     }
 }

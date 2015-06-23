@@ -64,18 +64,21 @@ public class InMemoryMailboxMapperTest {
         mapper.save(new SimpleMailbox<InMemoryId>(user1OtherNamespacePath, UID_VALIDITY));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPatchLikeOnAllMaillboxesShouldReturnMailboxesBelongingToThisNamespaceAndUser() throws MailboxException{
         assertThat(mapper.findMailboxWithPathLike(new MailboxPath("#private", "user1", "%")))
             .containsOnly(user1Inbox, user1SubMailbox1, user1SubMailbox2);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPatchLikeBasedOnInboxShouldReturnItsChildren() throws MailboxException{
         assertThat(mapper.findMailboxWithPathLike(new MailboxPath("#private", "user1", "INBOX.%")))
             .containsOnly(user1SubMailbox1, user1SubMailbox2);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void findMailboxWithPatchLikeBasedOnAStringShouldReturnMailboxesStartingWithThisString() throws MailboxException{
         assertThat(mapper.findMailboxWithPathLike(new MailboxPath("#private", "user1", "IN%")))

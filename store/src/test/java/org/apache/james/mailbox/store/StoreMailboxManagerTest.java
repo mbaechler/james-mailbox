@@ -31,70 +31,70 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StoreMailboxManagerTest {
 
     public static final int UID_VALIDITY = 42;
-    private StoreMailboxManager storeMailboxManager;
+    private StoreMailboxManager<TestId> storeMailboxManager;
 
     @Before
     public void setUp() {
-        storeMailboxManager = new StoreMailboxManager(null, new MockAuthenticator(), new JVMMailboxPathLocker(), new UnionMailboxACLResolver(), new SimpleGroupMembershipResolver());
+        storeMailboxManager = new StoreMailboxManager<TestId>(null, new MockAuthenticator(), new JVMMailboxPathLocker(), new UnionMailboxACLResolver(), new SimpleGroupMembershipResolver());
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnTrueWithIdenticalMailboxes() {
         MailboxPath path = new MailboxPath("namespace", "user", "name");
-        assertThat(storeMailboxManager.belongsToNamespaceAndUser(path, new SimpleMailbox(path, UID_VALIDITY))).isTrue();
+        assertThat(storeMailboxManager.belongsToNamespaceAndUser(path, new SimpleMailbox<TestId>(path, UID_VALIDITY))).isTrue();
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnTrueWithIdenticalMailboxesWithNullUser() {
         MailboxPath path = new MailboxPath("namespace", null, "name");
-        assertThat(storeMailboxManager.belongsToNamespaceAndUser(path, new SimpleMailbox(path, UID_VALIDITY))).isTrue();
+        assertThat(storeMailboxManager.belongsToNamespaceAndUser(path, new SimpleMailbox<TestId>(path, UID_VALIDITY))).isTrue();
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnTrueWithIdenticalMailboxesWithNullNamespace() {
         MailboxPath path = new MailboxPath(null, "user", "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath(null, "user", "name"), UID_VALIDITY))).isTrue();
+            new SimpleMailbox<TestId>(new MailboxPath(null, "user", "name"), UID_VALIDITY))).isTrue();
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnTrueWithMailboxWithSameNamespaceAndUserWithNullUser() {
         MailboxPath path = new MailboxPath("namespace", null, "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath("namespace", null, "name2"), UID_VALIDITY))).isTrue();
+            new SimpleMailbox<TestId>(new MailboxPath("namespace", null, "name2"), UID_VALIDITY))).isTrue();
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnTrueWithMailboxWithSameNamespaceAndUser() {
         MailboxPath path = new MailboxPath("namespace", "user", "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath("namespace", "user", "name2"), UID_VALIDITY))).isTrue();
+            new SimpleMailbox<TestId>(new MailboxPath("namespace", "user", "name2"), UID_VALIDITY))).isTrue();
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnFalseWithDifferentNamespace() {
         MailboxPath path = new MailboxPath("namespace", "user", "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath("namespace2", "user", "name"), UID_VALIDITY))).isFalse();
+            new SimpleMailbox<TestId>(new MailboxPath("namespace2", "user", "name"), UID_VALIDITY))).isFalse();
     }
 
     @Test
     public void belongsToNamespaceAndUserShouldReturnFalseWithDifferentUser() {
         MailboxPath path = new MailboxPath("namespace", "user", "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath("namespace", "user2", "name"), UID_VALIDITY))).isFalse();
+            new SimpleMailbox<TestId>(new MailboxPath("namespace", "user2", "name"), UID_VALIDITY))).isFalse();
     }
     @Test
     public void belongsToNamespaceAndUserShouldReturnFalseWithOneOfTheUserNull() {
         MailboxPath path = new MailboxPath("namespace", null, "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath("namespace", "user", "name"), UID_VALIDITY))).isFalse();
+            new SimpleMailbox<TestId>(new MailboxPath("namespace", "user", "name"), UID_VALIDITY))).isFalse();
     }
     @Test
     public void belongsToNamespaceAndUserShouldReturnFalseIfNamespaceAreDifferentWithNullUser() {
         MailboxPath path = new MailboxPath("namespace", null, "name");
         assertThat(storeMailboxManager.belongsToNamespaceAndUser(path,
-            new SimpleMailbox(new MailboxPath("namespace2", null, "name"), UID_VALIDITY))).isFalse();
+            new SimpleMailbox<TestId>(new MailboxPath("namespace2", null, "name"), UID_VALIDITY))).isFalse();
     }
 
 

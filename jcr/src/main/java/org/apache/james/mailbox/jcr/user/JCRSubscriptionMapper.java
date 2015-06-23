@@ -48,6 +48,9 @@ import org.apache.james.mailbox.store.user.model.Subscription;
  */
 public class JCRSubscriptionMapper extends AbstractJCRScalingMapper implements SubscriptionMapper {
 
+    @SuppressWarnings("deprecation")
+    private static final String XPATH_LANGUAGE = Query.XPATH;
+
     public JCRSubscriptionMapper(final MailboxSessionJCRRepository repos, MailboxSession session, final int scaling) {
         super(repos,session, scaling);
     }
@@ -100,7 +103,7 @@ public class JCRSubscriptionMapper extends AbstractJCRScalingMapper implements S
             String queryString = "/jcr:root/" + MAILBOXES_PATH + "//element(*,jamesMailbox:user)[@" + JCRSubscription.USERNAME_PROPERTY + "='" + user + "'] AND [@" + JCRSubscription.MAILBOXES_PROPERTY +"='" + mailbox + "']";
 
             QueryManager manager = getSession().getWorkspace().getQueryManager();
-            QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+            QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
             
             NodeIterator nodeIt = result.getNodes();
             if (nodeIt.hasNext()) {
@@ -130,7 +133,7 @@ public class JCRSubscriptionMapper extends AbstractJCRScalingMapper implements S
             String queryString = "/jcr:root/" + MAILBOXES_PATH + "//element(*,jamesMailbox:user)[@" + JCRSubscription.USERNAME_PROPERTY + "='" + user + "']";
 
             QueryManager manager = getSession().getWorkspace().getQueryManager();
-            QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+            QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
             
             NodeIterator nodeIt = result.getNodes();
             while (nodeIt.hasNext()) {

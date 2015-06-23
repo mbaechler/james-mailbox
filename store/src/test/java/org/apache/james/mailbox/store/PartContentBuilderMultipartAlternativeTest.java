@@ -26,8 +26,6 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import javax.management.openmbean.InvalidOpenTypeException;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mailbox.model.MessageResult.Header;
 import org.apache.james.mailbox.store.ResultHeader;

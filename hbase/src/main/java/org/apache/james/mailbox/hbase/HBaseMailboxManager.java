@@ -18,8 +18,6 @@
  ****************************************************************/
 package org.apache.james.mailbox.hbase;
 
-import java.util.UUID;
-
 import org.apache.james.mailbox.MailboxPathLocker;
 import org.apache.james.mailbox.MailboxSession;
 import org.apache.james.mailbox.acl.GroupMembershipResolver;

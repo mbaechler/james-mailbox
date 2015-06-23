@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
@@ -31,10 +32,14 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.james.mailbox.exception.SubscriptionException;
 import org.apache.james.mailbox.hbase.HBaseClusterSingleton;
 import org.apache.james.mailbox.hbase.HBaseMailboxSessionMapperFactory;
+
 import static org.apache.james.mailbox.hbase.HBaseNames.*;
+
 import org.apache.james.mailbox.store.user.model.Subscription;
 import org.apache.james.mailbox.store.user.model.impl.SimpleSubscription;
+
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -154,7 +159,7 @@ public class HBaseSubscriptionMapperTest {
     @Test
     public void testFindSubscriptionsForUser() throws Exception {
         LOG.info("findSubscriptionsForUser");
-        final SimpleSubscription fake1 = new SimpleSubscription("user1", "FAKEBOX");
+        @SuppressWarnings("unused") final SimpleSubscription fake1 = new SimpleSubscription("user1", "FAKEBOX");
         final SimpleSubscription fake2 = new SimpleSubscription("fakeUser", "INBOX");
         for (String user : subscriptionList.keySet()) {
             LOG.info("Searching for all subscriptions for user: " + user);

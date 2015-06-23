@@ -62,6 +62,9 @@ import org.apache.james.mailbox.store.mail.model.Message;
  */
 public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JCRImapConstants {
 
+    @SuppressWarnings("deprecation")
+    private static final String XPATH_LANGUAGE = Query.XPATH;
+
     /**
      * Store the messages directly in the mailbox: .../mailbox/
      */
@@ -213,7 +216,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
             String queryString = "/jcr:root" + getMailboxPath(mailbox) + "//element(*,jamesMailbox:message) order by @"
                     + JCRMessage.UID_PROPERTY;
             QueryManager manager = getSession().getWorkspace().getQueryManager();
-            QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+            QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
             NodeIterator nodes = result.getNodes();
             long count = nodes.getSize();
             if (count == -1) {
@@ -244,7 +247,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
             String queryString = "/jcr:root" + getMailboxPath(mailbox) + "//element(*,jamesMailbox:message)[@"
                     + JCRMessage.SEEN_PROPERTY + "='false'] order by @" + JCRMessage.UID_PROPERTY;
             QueryManager manager = getSession().getWorkspace().getQueryManager();
-            QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+            QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
             NodeIterator nodes = result.getNodes();
             long count = nodes.getSize();
 
@@ -339,7 +342,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                     + JCRMessage.RECENT_PROPERTY + "='true'] order by @" + JCRMessage.UID_PROPERTY;
 
             QueryManager manager = getSession().getWorkspace().getQueryManager();
-            Query query = manager.createQuery(queryString, Query.XPATH);
+            Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
             QueryResult result = query.execute();
 
             NodeIterator iterator = result.getNodes();
@@ -367,7 +370,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
 
             QueryManager manager = getSession().getWorkspace().getQueryManager();
 
-            Query query = manager.createQuery(queryString, Query.XPATH);
+            Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
             query.setLimit(1);
             QueryResult result = query.execute();
 
@@ -551,7 +554,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                 + JCRMessage.UID_PROPERTY + ">=" + uid + "] order by @" + JCRMessage.UID_PROPERTY;
 
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        Query query = manager.createQuery(queryString, Query.XPATH);
+        Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
         if (batchSize > 0)
             query.setLimit(batchSize);
         QueryResult result = query.execute();
@@ -570,7 +573,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                 + JCRMessage.UID_PROPERTY + "=" + uid + "]";
 
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        Query query = manager.createQuery(queryString, Query.XPATH);
+        Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
         query.setLimit(1);
         QueryResult result = query.execute();
         NodeIterator iterator = result.getNodes();
@@ -588,7 +591,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                 + "] order by @" + JCRMessage.UID_PROPERTY;
 
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        Query query = manager.createQuery(queryString, Query.XPATH);
+        Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
         if (batchSize > 0)
             query.setLimit(batchSize);
         QueryResult result = query.execute();
@@ -607,7 +610,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
         String queryString = "/jcr:root" + getMailboxPath(mailbox) + "//element(*,jamesMailbox:message) order by @"
                 + JCRMessage.UID_PROPERTY;
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        Query query = manager.createQuery(queryString, Query.XPATH);
+        Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
         if (batchSize > 0)
             query.setLimit(batchSize);
         QueryResult result = query.execute();
@@ -627,7 +630,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                 + JCRMessage.UID_PROPERTY;
 
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+        QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
 
         NodeIterator iterator = result.getNodes();
         while (iterator.hasNext()) {
@@ -642,7 +645,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
         String queryString = "/jcr:root" + getMailboxPath(mailbox) + "//element(*,jamesMailbox:message)[@"
                 + JCRMessage.UID_PROPERTY + "=" + uid + " and @" + JCRMessage.DELETED_PROPERTY + "='true']";
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        Query query = manager.createQuery(queryString, Query.XPATH);
+        Query query = manager.createQuery(queryString, XPATH_LANGUAGE);
         query.setLimit(1);
         QueryResult result = query.execute();
 
@@ -662,7 +665,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                 + JCRMessage.DELETED_PROPERTY + "='true'] order by @" + JCRMessage.UID_PROPERTY;
 
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+        QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
 
         NodeIterator iterator = result.getNodes();
         while (iterator.hasNext()) {
@@ -678,7 +681,7 @@ public class JCRMessageMapper extends AbstractMessageMapper<JCRId> implements JC
                 + JCRMessage.DELETED_PROPERTY + "='true'] order by @" + JCRMessage.UID_PROPERTY;
 
         QueryManager manager = getSession().getWorkspace().getQueryManager();
-        QueryResult result = manager.createQuery(queryString, Query.XPATH).execute();
+        QueryResult result = manager.createQuery(queryString, XPATH_LANGUAGE).execute();
 
         NodeIterator iterator = result.getNodes();
         while (iterator.hasNext()) {

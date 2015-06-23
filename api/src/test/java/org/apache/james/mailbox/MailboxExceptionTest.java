@@ -18,30 +18,30 @@
  ****************************************************************/
 package org.apache.james.mailbox;
 
-import junit.framework.Assert;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.james.mailbox.exception.MailboxException;
 import org.junit.Test;
-
 /**
  * Ensure that {@link MailboxException} construction is correct.
  */
 public class MailboxExceptionTest {
     
     private static final String EXCEPTION_MESSAGE = "this is an exception message";
-    
-    private static final Exception EXCEPTION_CAUSE = new Exception("this is a cause");
+    private static final String CAUSE_MESSAGE = "this is a cause";
+    private static final Exception EXCEPTION_CAUSE = new Exception(CAUSE_MESSAGE);
     
     @Test
     public void testMailboxExceptionMessage() {
         MailboxException mbe = new MailboxException(EXCEPTION_MESSAGE);
-        Assert.assertEquals(EXCEPTION_MESSAGE, mbe.getMessage());
+        assertThat(mbe).hasMessage(EXCEPTION_MESSAGE);
     }
 
     @Test
     public void testMailboxExceptionCause() {
         MailboxException mbe = new MailboxException(EXCEPTION_MESSAGE, EXCEPTION_CAUSE);
-        Assert.assertEquals(EXCEPTION_MESSAGE, mbe.getMessage());
+        assertThat(mbe).hasMessage(EXCEPTION_MESSAGE).hasCauseExactlyInstanceOf(Exception.class);
+        assertThat(mbe.getCause()).hasMessage(CAUSE_MESSAGE);
     }
 
 }

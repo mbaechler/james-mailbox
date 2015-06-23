@@ -19,6 +19,8 @@
 
 package org.apache.james.mailbox.store;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,8 +29,6 @@ import java.util.Set;
 
 import javax.mail.Flags;
 import javax.mail.util.SharedByteArrayInputStream;
-
-import junit.framework.Assert;
 
 import org.apache.james.mailbox.exception.MailboxException;
 import org.apache.james.mailbox.model.MessageMetaData;
@@ -41,6 +41,7 @@ import org.apache.james.mailbox.store.mail.model.Mailbox;
 import org.apache.james.mailbox.store.mail.model.Message;
 import org.apache.james.mailbox.store.mail.model.impl.PropertyBuilder;
 import org.apache.james.mailbox.store.mail.model.impl.SimpleMessage;
+import org.assertj.core.api.iterable.Extractor;
 import org.junit.Test;
 
 public class StoreMessageResultIteratorTest {
@@ -69,7 +70,7 @@ public class StoreMessageResultIteratorTest {
                 long end = set.getUidTo();
                 long calcEnd = start + limit;
                 if (calcEnd > end) {
-                    calcEnd = end;
+                    calcEnd = end + 1;
                 }
 
                 List<Message<TestId>> messages = new ArrayList<Message<TestId>>();
@@ -164,13 +165,12 @@ public class StoreMessageResultIteratorTest {
             }
         });
 
-        long i = 1;
-        while (it.hasNext()) {
-            MessageResult r = it.next();
-            Assert.assertEquals(i++, r.getUid());
-        }
-        Assert.assertEquals(10, i);
-
+        assertThat(it).extracting(new Extractor<MessageResult, Long>(){
+            @Override
+            public Long extract(MessageResult input) {
+                return input.getUid();
+            }
+        }).containsExactly(1l, 2l, 3l, 4l, 5l, 6l, 7l, 8l, 9l, 10l);
     }
 
 }

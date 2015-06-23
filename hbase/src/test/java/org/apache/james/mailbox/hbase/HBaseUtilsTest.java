@@ -146,7 +146,7 @@ public class HBaseUtilsTest {
         flags.add("userFlag1");
         flags.add("userFlag2");
         HBaseId uuid = HBaseId.of(UUID.randomUUID());
-        final SimpleMessage message = new SimpleMessage(new Date(), 100, 10, null, flags, new PropertyBuilder(), uuid);
+        final SimpleMessage<HBaseId> message = new SimpleMessage<HBaseId>(new Date(), 100, 10, null, flags, new PropertyBuilder(), uuid);
         Put put = flagsToPut(message, flags);
         //test for the system flags
         assertTrue(put.has(MESSAGES_META_CF, FLAGS_SEEN, MARKER_PRESENT));

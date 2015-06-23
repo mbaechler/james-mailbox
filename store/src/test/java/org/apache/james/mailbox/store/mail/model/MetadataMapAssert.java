@@ -41,6 +41,7 @@ public class MetadataMapAssert extends AbstractAssert<MetadataMapAssert, Map<Lon
         return this;
     }
 
+    @SuppressWarnings("rawtypes") 
     public MetadataMapAssert containsMetadataForMessages(Message... messages) {
         for(Message message : messages) {
             if (actual.get(message.getUid()).getUid() != message.getUid()) {
