@@ -29,7 +29,7 @@
 
     <artifactId>apache-james-mailbox-tika</artifactId>
     <description>Apache James Mailbox project for optional Tika dependency, to extract attachment textual content before indexation</description>
-    <name>Apache James :: Mailbox :: ElasticSearch</name>
+    <name>Apache James :: Mailbox :: Tika</name>
 
     <dependencies>
         <dependency>

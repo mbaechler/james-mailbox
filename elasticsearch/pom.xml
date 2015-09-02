@@ -29,7 +29,7 @@
 
     <artifactId>apache-james-mailbox-elasticsearch</artifactId>
     <description>Apache James Mailbox IMAP search implementation using ElasticSearch</description>
-    <name>Apache James :: Mailbox :: Tika</name>
+    <name>Apache James :: Mailbox :: ElasticSearch</name>
 
     <properties>
         <javax.mail.groupId>javax.mail</javax.mail.groupId>
