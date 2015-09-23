@@ -49,7 +49,9 @@ public abstract class AbstractSubscriptionManagerTest {
     }
     
     @After
-    public void teardown() {
+    public void teardown() throws SubscriptionException {
+        manager.unsubscribe(session, MAILBOX1);
+        manager.unsubscribe(session, MAILBOX2);
         manager.endProcessingRequest(session);
     }
     
