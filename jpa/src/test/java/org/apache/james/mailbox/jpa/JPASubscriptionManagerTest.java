@@ -65,7 +65,6 @@ public class JPASubscriptionManagerTest extends AbstractSubscriptionManagerTest{
     
     @Override
     public SubscriptionManager createSubscriptionManager() {
-        System.out.println(entityManagerFactory);
         JVMMailboxPathLocker locker = new JVMMailboxPathLocker();
 
         JPAMailboxSessionMapperFactory mf = new JPAMailboxSessionMapperFactory(entityManagerFactory, new JPAUidProvider(locker, entityManagerFactory), new JPAModSeqProvider(locker, entityManagerFactory));
