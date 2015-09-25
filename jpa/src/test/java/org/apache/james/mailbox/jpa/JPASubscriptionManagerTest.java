@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import org.apache.james.mailbox.AbstractSubscriptionManagerTest;
 import org.apache.james.mailbox.SubscriptionManager;
+import org.apache.james.mailbox.exception.SubscriptionException;
 import org.apache.james.mailbox.jpa.mail.JPAModSeqProvider;
 import org.apache.james.mailbox.jpa.mail.JPAUidProvider;
 import org.apache.james.mailbox.jpa.mail.model.JPAMailbox;
@@ -41,7 +42,7 @@ public class JPASubscriptionManagerTest extends AbstractSubscriptionManagerTest{
     private OpenJPAEntityManagerFactory entityManagerFactory;
 
     @Before
-    public void setUp() {
+    public void setup() {
 
         HashMap<String, String> properties = new HashMap<String, String>();
         properties.put("openjpa.ConnectionDriverName", "org.h2.Driver");
@@ -58,10 +59,13 @@ public class JPASubscriptionManagerTest extends AbstractSubscriptionManagerTest{
                 JPASubscription.class.getName() + ")");
        
         entityManagerFactory = OpenJPAPersistence.getEntityManagerFactory(properties);
+
+        super.setup();
     }
     
     @Override
     public SubscriptionManager createSubscriptionManager() {
+        System.out.println(entityManagerFactory);
         JVMMailboxPathLocker locker = new JVMMailboxPathLocker();
 
         JPAMailboxSessionMapperFactory mf = new JPAMailboxSessionMapperFactory(entityManagerFactory, new JPAUidProvider(locker, entityManagerFactory), new JPAModSeqProvider(locker, entityManagerFactory));
@@ -72,7 +76,8 @@ public class JPASubscriptionManagerTest extends AbstractSubscriptionManagerTest{
     }
 
     @After
-    public void tearDown() {
+    public void teardown() throws SubscriptionException {
+        super.teardown();
         entityManagerFactory.close();
     }
 }
